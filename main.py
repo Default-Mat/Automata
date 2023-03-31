@@ -1,5 +1,4 @@
 from bs4 import BeautifulSoup
-import lxml
 
 
 class States:
@@ -21,6 +20,12 @@ class States:
 
     def getName(self):
         return self.name
+
+    def getFinalStatus(self):
+        return self.isFinal
+
+    def getInitialStatus(self):
+        return self.isInitial
 
 
 with open('automata.xml', 'r') as f:
@@ -75,6 +80,8 @@ while i < number_of_states:
         j += 1
 
     obj = States(isFinal, isInitial, states[i])
+    if obj.getInitialStatus():
+        initialState_obj = obj
     stateObj.append(obj)
     i += 1
 
@@ -102,6 +109,28 @@ while i < number_of_trans:
     sourceObj.setNextState(label, destObj)
     i += 1
 
-# string = input('inter a string: ')
-# i = 0
+while True:
+    string = input('Enter a string(type "end" to exit): ')
+    if string == 'end':
+        break
+    currentState = initialState_obj
+    i = 0
+    alph_exists = True
+    trans_available = True
+    while i < len(string):
+        if string[i] not in alphabets:
+            alph_exists = False
+            break
 
+        currentState = currentState.getNextState(string[i])
+
+        if currentState is None:
+            trans_available = False
+            break
+
+        i += 1
+
+    if currentState.getFinalStatus() and alph_exists and trans_available:
+        print('The input string is accepted.')
+    else:
+        print('The input string is not accepted.')
