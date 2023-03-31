@@ -2,33 +2,33 @@ from bs4 import BeautifulSoup
 
 
 class States:
-    name = None
-    transitions = {}
-    isFinal = False
-    isInitial = False
+    __name = None
+    __transitions = {}
+    __isFinal = False
+    __isInitial = False
 
-    def __init__(self, isFinal, isInitial, name):
-        self.isFinal = isFinal
-        self.isInitial = isInitial
-        self.name = name
+    def __init__(self, isFinal=False, isInitial=False, name=None):
+        self.__isFinal = isFinal
+        self.__isInitial = isInitial
+        self.__name = name
 
     def setNextState(self, alph, state):
-        self.transitions[alph] = state
+        self.__transitions[alph] = state
 
     def getNextState(self, alph):
-        return self.transitions[alph]
+        return self.__transitions[alph]
 
     def getName(self):
-        return self.name
+        return self.__name
 
     def getFinalStatus(self):
-        return self.isFinal
+        return self.__isFinal
 
     def getInitialStatus(self):
-        return self.isInitial
+        return self.__isInitial
 
 
-with open('automata.xml', 'r') as f:
+with open('automata2.xml', 'r') as f:
     data = f.read()
 
 soup = BeautifulSoup(data, 'xml')
@@ -95,8 +95,8 @@ while i < number_of_trans:
     label = transition_tags[i].get('label')
     j = 0
     objs_found = 0
-    sourceObj = None
-    destObj = None
+    destObj = States()
+    sourceObj = States()
     while j < number_of_states and objs_found != 2:
         if stateObj[j].getName() == source:
             sourceObj = stateObj[j]
@@ -106,6 +106,18 @@ while i < number_of_trans:
             destObj = stateObj[j]
             objs_found += 1
         j += 1
+    # while j < number_of_states:
+    #     if stateObj[j].getName() == source:
+    #         sourceObj = stateObj[j]
+    #         break
+    #     j += 1
+    #
+    # j = 0
+    # while j < number_of_states:
+    #     if stateObj[j].getName() == destination:
+    #         destObj = stateObj[j]
+    #         break
+    #     j += 1
     sourceObj.setNextState(label, destObj)
     i += 1
 
