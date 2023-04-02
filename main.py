@@ -163,4 +163,9 @@ class Automata:
 
 automata = Automata()
 automata.get_file('automata2.xml')
-automata.check_input('aab')
+
+while True:
+    string = input('Enter a string(type "end" to exit): ')
+    if string == 'end':
+        break
+    automata.check_input(string)
