@@ -147,9 +147,10 @@ class Automata:
                 alph_exists = False
                 break
 
-            currentState = currentState.getNextState(string[i])
+            try:
+                currentState = currentState.getNextState(string[i])
 
-            if currentState is None:
+            except KeyError:
                 trans_available = False
                 break
 
@@ -162,7 +163,7 @@ class Automata:
 
 
 automata = Automata()
-automata.get_file('automata2.xml')
+automata.get_file('automata.xml')
 
 while True:
     string = input('Enter a string(type "end" to exit): ')
